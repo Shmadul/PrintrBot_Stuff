@@ -1,0 +1,67 @@
+#!/bin/bash
+flashbin="~/FirmwareUpdatr"
+cfw1="~/FirmwareUpdatr/Firmware/Printrbot_Simple_Metal_(E3Dv6).hex"
+cfw2="/FirmwareUpdatr/Firmware/Printrbot_Simple_Metal_(HeatedBed).hex"
+cfw3="~/FirmwareUpdatr/Firmware/Printrbot_Simple_Metal_(E3Dv6%2BHeatedBed).hex"
+if [ -d "$flashbin" ]
+then
+    echo "Binaries Detected"
+else
+	echo "Downloading Binaries"
+    cd ~
+    git clone --recursive https://github.com/Printrbot/FirmwareUpdatr.git
+    clear
+fi
+echo "@shmadul's Printrbot CFW Flashing Utility:"
+echo "	1. E3D v6 Hotend Compatible CFW"
+echo "	2. Heated Bed Compatible CFW"
+echo "	3. E3D v6 Hotend + Heated Bed Compatible CFW"
+read choice
+
+if [ "$choice" -eq 1 ];then
+	clear
+	echo "Installing E3D v6 Hotend Compatible CFW"
+	if [ -e "$cfw1" ]
+	then
+    	echo "E3D v6 Hotend CFW Detected"
+    	~/FirmwareUpdatr/pb-firmware-update.sh $cfw1
+	else
+		echo "Downloading Binaries"
+    	cd ~/FirmwareUpdatr/
+    	mkdir Firmware; cd ~/FirmwareUpdatr/Firmware
+    	curl -O "https://raw.githubusercontent.com/Shmadul/PrintrBot_Stuff/master/firmware/Pre_Mid_2014/Printrbot_Simple_Metal_(E3Dv6).hex"
+    	clear
+    	~/FirmwareUpdatr/pb-firmware-update.sh $cfw1
+	fi
+elif [ "$choice" -eq 2 ];then
+	echo "	2. Heated Bed Compatible CFW"
+	if [ -e "$cfw2" ]
+	then
+    	echo "E3D v6 Hotend CFW Detected"
+    	~/FirmwareUpdatr/pb-firmware-update.sh $cfw2
+	else
+		echo "Downloading Binaries"
+    	cd ~/FirmwareUpdatr/
+    	mkdir Firmware; cd ~/FirmwareUpdatr/Firmware
+    	curl -O "https://raw.githubusercontent.com/Shmadul/PrintrBot_Stuff/master/firmware/Printrbot_Simple_Metal_(HeatedBed).hex"
+    	clear
+    	~/FirmwareUpdatr/pb-firmware-update.sh $cfw2
+	fi
+	
+elif [ "$choice" -eq 3 ];then
+	echo "	3. E3D v6 Hotend + Heated Bed Compatible CFW"
+	if [ -d "$cfw3" ]
+	then
+    	echo "E3D v6 Hotend CFW Detected"
+    	~/FirmwareUpdatr/pb-firmware-update.sh $cfw3
+	else
+		echo "Downloading Binaries"
+    	cd ~/FirmwareUpdatr/
+    	mkdir Firmware; cd ~/FirmwareUpdatr/Firmware
+    	curl -O "https://raw.githubusercontent.com/Shmadul/PrintrBot_Stuff/master/firmware/Pre_Mid_2014/Printrbot_Simple_Metal_(E3Dv6%2BHeatedBed).hex"
+    	~/FirmwareUpdatr/pb-firmware-update.sh $cfw3
+    	clear
+	fi
+else
+   echo "Invalid Choice"
+fi
